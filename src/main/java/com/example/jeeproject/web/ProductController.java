@@ -39,7 +39,7 @@ public class ProductController {
     }
 
     @PostMapping("/add_productPost")
-    public String add_product(Model model, @RequestParam(name= "productName") String productName, @RequestParam(name = "quantity") int quantity, @RequestParam(name = "unitPrice") double unitPrice){
+    public String add_product(Model model, @RequestParam(name= "productName") String productName, @RequestParam(name = "quantity") double quantity, @RequestParam(name = "unitPrice") double unitPrice){
         Product product = new Product();
         product.setProductName(productName);
         product.setQuantity(quantity);

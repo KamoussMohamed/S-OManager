@@ -1,7 +1,9 @@
 package com.example.jeeproject;
 
 import com.example.jeeproject.dao.entities.Customer;
+import com.example.jeeproject.dao.entities.Product;
 import com.example.jeeproject.services.CustomerManager;
+import com.example.jeeproject.services.ProductManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +15,8 @@ public class JeeProjectApplication implements CommandLineRunner {
 
 	@Autowired
 	private CustomerManager customerManager;
+	@Autowired
+	private ProductManager productManager;
 
 	public static void main(String[] args) {
 		SpringApplication.run(JeeProjectApplication.class, args);
@@ -31,6 +35,12 @@ public class JeeProjectApplication implements CommandLineRunner {
 			customer.setEmail("mohamed@gmail.com");
 			customer.setAddress("Rue 1 nomRue nomVille");
 			customerManager.createCustomer(customer);
+
+			Product product = new Product();
+			product.setProductName("Ferrari");
+			product.setQuantity(2);
+			product.setProductUnitPrice(1000000);
+			productManager.addProduct(product);
 
 		};
 	}
