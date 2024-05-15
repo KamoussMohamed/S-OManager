@@ -2,26 +2,21 @@ package com.example.jeeproject.dao.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString
+
 public class Product {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productId;
+    @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long id;
     private String productName;
+    private double quantity;
     private double productUnitPrice;
-    private float productQuantity;
 
     @ManyToMany
-    private List<Order> orders = new ArrayList<Order>();
+    List<Order> orders = new ArrayList<Order>();
 }
