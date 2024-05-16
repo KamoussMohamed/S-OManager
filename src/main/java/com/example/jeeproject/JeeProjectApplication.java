@@ -1,14 +1,20 @@
 package com.example.jeeproject;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.jeeproject.dao.entities.Customer;
+import com.example.jeeproject.dao.entities.Order;
 import com.example.jeeproject.dao.entities.Product;
 import com.example.jeeproject.services.CustomerManager;
+import com.example.jeeproject.services.OrderManager;
 import com.example.jeeproject.services.ProductManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class JeeProjectApplication implements CommandLineRunner {
@@ -17,6 +23,8 @@ public class JeeProjectApplication implements CommandLineRunner {
 	private CustomerManager customerManager;
 	@Autowired
 	private ProductManager productManager;
+	@Autowired
+	private OrderManager orderManager;
 
 	public static void main(String[] args) {
 		SpringApplication.run(JeeProjectApplication.class, args);
@@ -41,6 +49,30 @@ public class JeeProjectApplication implements CommandLineRunner {
 			product.setQuantity(2);
 			product.setProductUnitPrice(1000000);
 			productManager.addProduct(product);
+
+			Product product2 = new Product();
+			product2.setProductName("BMW");
+			product2.setQuantity(2);
+			product2.setProductUnitPrice(500000);
+			productManager.addProduct(product2);
+
+			Product product3 = new Product();
+			product3.setProductName("Audi");
+			product3.setQuantity(2);
+			product3.setProductUnitPrice(600000);
+			productManager.addProduct(product3);
+
+			Order order = new Order();
+			order.setCustomer(customer);
+			order.setOrderDescription("Am a ferrari, I go VROOOOUUUMMMM");
+			order.setProducts(List.of(product, product2, product2, product3));
+			orderManager.addOrder(order);
+
+			Order order2 = new Order();
+			order2.setCustomer(customer);
+			order2.setOrderDescription("test test");
+			order2.setProducts(List.of(product, product2));
+			orderManager.addOrder(order2);
 
 		};
 	}
