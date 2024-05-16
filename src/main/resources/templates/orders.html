@@ -21,11 +21,10 @@
         <td th:text="${order.orderDescription}"></td>
         <td th:text="${order.customer.name}"></td>
         <td>
-            <ul>
-                <li th:each="product : ${order.products}" th:text="${product.productName}"></li>
-            </ul>
+            <span th:utext="${productOccurrencesDisplay[order.orderId]}"></span>
         </td>
         <td th:text="${orderTotalAmounts[order.orderId]}"></td>
+
     </tr>
     </tbody>
 </table>

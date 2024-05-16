@@ -64,13 +64,13 @@ public class JeeProjectApplication implements CommandLineRunner {
 
 			Order order = new Order();
 			order.setCustomer(customer);
-			order.setOrderDescription("Am a ferrari, I go VROOOOUUUMMMM");
+			order.setOrderDescription("order 1");
 			order.setProducts(List.of(product, product2, product2, product3));
 			orderManager.addOrder(order);
 
 			Order order2 = new Order();
 			order2.setCustomer(customer);
-			order2.setOrderDescription("test test");
+			order2.setOrderDescription("order 2");
 			order2.setProducts(List.of(product, product2));
 			orderManager.addOrder(order2);
 

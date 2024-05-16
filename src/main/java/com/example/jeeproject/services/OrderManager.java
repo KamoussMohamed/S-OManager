@@ -11,4 +11,5 @@ public interface OrderManager {
     public List<Order> getAllOrders();
     public boolean deleteOrderByOrderId(Integer orderId);
     public double totalAmount(Integer orderId);
+    public String productsDisplay(Integer orderId);
 }

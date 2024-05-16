@@ -25,16 +25,23 @@ public class OrderController {
     public String orders(Model model) {
         List<Order> orders = orderManager.getAllOrders();
         Map<Integer, Double> orderTotalAmounts = new HashMap<>();
+        Map<Integer, String> productOccurrencesDisplay = new HashMap<>();
+
         for (Order order : orders) {
             double totalAmount = orderManager.totalAmount(order.getOrderId());
             orderTotalAmounts.put(order.getOrderId(), totalAmount);
+
+            String productDisplay = orderManager.productsDisplay(order.getOrderId());
+            productOccurrencesDisplay.put(order.getOrderId(), productDisplay);
         }
 
         model.addAttribute("orders", orders);
         model.addAttribute("orderTotalAmounts", orderTotalAmounts);
+        model.addAttribute("productOccurrencesDisplay", productOccurrencesDisplay);
 
         return "orders";
     }
+
 
     @GetMapping("/add_order")
     public String addORder(Model model) {

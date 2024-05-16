@@ -68,6 +68,28 @@ public class OrderService implements OrderManager{
         return totalAmount;
     }
 
+    @Override
+    public String productsDisplay(Integer orderId) {
+        Order order = getOrderById(orderId);
+        Map<Product, Integer> productOccurrences = new HashMap<>();
+
+        for (Product product : order.getProducts()) {
+            productOccurrences.put(product, productOccurrences.getOrDefault(product, 0) + 1);
+        }
+
+        StringBuilder display = new StringBuilder();
+
+        for (Map.Entry<Product, Integer> entry : productOccurrences.entrySet()) {
+            Product product = entry.getKey();
+            int occurrence = entry.getValue();
+            String displayString = product.getProductName() + " x" + occurrence + "<br>"; // Add newline
+            display.append(displayString);
+        }
+
+        return display.toString();
+    }
+
+
 
 
 }
