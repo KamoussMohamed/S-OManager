@@ -2,14 +2,20 @@ package com.example.jeeproject.web;
 
 
 import com.example.jeeproject.dao.entities.Order;
+import com.example.jeeproject.dao.entities.Product;
+import com.example.jeeproject.services.CustomerManager;
 import com.example.jeeproject.services.OrderManager;
+import com.example.jeeproject.services.ProductManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +26,10 @@ public class OrderController {
 
     @Autowired
     private OrderManager orderManager;
+    @Autowired
+    private CustomerManager customerManager;
+    @Autowired
+    private ProductManager productManager;
 
     @GetMapping("/orders")
     public String orders(Model model) {
@@ -44,13 +54,25 @@ public class OrderController {
 
 
     @GetMapping("/add_order")
-    public String addORder(Model model) {
-        model.addAttribute("order", new Order());
+    public String showAddOrderForm(Model model) {
+        model.addAttribute("orderCreated", new Order());
+        model.addAttribute("products", productManager.getAllProducts());
+        model.addAttribute("customers", customerManager.getAllCustomers());
         return "add_order";
     }
 
-    @PostMapping("add_OrderPost")
-    public String addOrderPost(@ModelAttribute("order") Order order) {
+    @PostMapping("/add_orderPost")
+    public String addOrder(@ModelAttribute("orderCreated") Order order,@RequestParam("orderDescription") String orderDescription,
+                           @RequestParam("customer") Long customerId,
+                           @RequestParam("products") List<Long> productIds) {
+        order.setOrderDescription(orderDescription);
+        order.setCustomer(customerManager.getCustomerById(customerId));
+        List<Product> products= new ArrayList<>();
+        for (Long productId : productIds) {
+            products.add(productManager.getProductById(productId));
+        }
+        order.setProducts(products);
+        orderManager.addOrder(order);
         return "redirect:/orders";
     }
 }
