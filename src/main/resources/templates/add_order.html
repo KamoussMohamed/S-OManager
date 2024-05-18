@@ -3,10 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Order</title>
+    <script>
+        let selectedProducts = [];
+
+        function addItem() {
+            const productSelect = document.getElementById('products');
+            const productId = productSelect.value;
+            const productName = productSelect.options[productSelect.selectedIndex].text;
+            const quantityInput = document.getElementById('quantity');
+            const quantity = parseInt(quantityInput.value);
+
+            // Repeat the product ID based on its quantity
+            for (let i = 0; i < quantity; i++) {
+                selectedProducts.push(productId);
+            }
+
+            updateTable();
+            quantityInput.value = '';
+        }
+
+        function updateTable() {
+            const tableBody = document.getElementById('selectedProductsTableBody');
+            tableBody.innerHTML = '';
+
+            selectedProducts.forEach(productId => {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                const quantityCell = document.createElement('td');
+
+                // Get product name based on product ID
+                const productName = document.querySelector('#products [value="' + productId + '"]').text;
+
+                nameCell.textContent = productName;
+                quantityCell.textContent = 1; // Since we're repeating the product, set quantity to 1
+
+                row.appendChild(nameCell);
+                row.appendChild(quantityCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        function submitForm() {
+            const form = document.getElementById('orderForm');
+            const productsInput = document.createElement('input');
+            productsInput.type = 'hidden';
+            productsInput.name = 'productsJson';
+            productsInput.value = JSON.stringify(selectedProducts);
+
+            form.appendChild(productsInput);
+            form.submit();
+        }
+    </script>
 </head>
 <body>
 <h1>Add Order</h1>
-<form action="/add_orderPost" method="post">
+<form id="orderForm" action="/add_orderPost" method="post">
     <div>
         <label for="orderDescription">Order Description:</label>
         <input type="text" id="orderDescription" name="orderDescription" required>
@@ -19,13 +70,30 @@
     </div>
     <div>
         <label for="products">Select Products:</label>
-        <select id="products" name="products" multiple="multiple">
+        <select id="products" name="products">
             <option th:each="prod : ${products}" th:value="${prod.id}" th:text="${prod.productName}"></option>
         </select>
     </div>
-
-    <button type="submit">Submit</button>
+    <div>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required>
+    </div>
+    <button type="button" onclick="addItem()">Add Item</button>
+    <button type="button" onclick="submitForm()">Submit</button>
 </form>
+
+<h2>Selected Products</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Quantity</th>
+    </tr>
+    </thead>
+    <tbody id="selectedProductsTableBody">
+    </tbody>
+</table>
+
 <a href="/orders">Back to Orders</a>
 </body>
 </html>

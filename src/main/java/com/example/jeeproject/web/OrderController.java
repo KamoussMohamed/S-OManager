@@ -1,15 +1,17 @@
 package com.example.jeeproject.web;
 
 
+
 import com.example.jeeproject.dao.entities.Order;
 import com.example.jeeproject.dao.entities.Product;
 import com.example.jeeproject.services.CustomerManager;
 import com.example.jeeproject.services.OrderManager;
 import com.example.jeeproject.services.ProductManager;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,13 +63,23 @@ public class OrderController {
         return "add_order";
     }
 
+
+
+
+
     @PostMapping("/add_orderPost")
-    public String addOrder(@ModelAttribute("orderCreated") Order order,@RequestParam("orderDescription") String orderDescription,
+    public String addOrder(Model model, @ModelAttribute("orderCreated") Order order,
+                           @RequestParam("orderDescription") String orderDescription,
                            @RequestParam("customer") Long customerId,
-                           @RequestParam("products") List<Long> productIds) {
+                           @RequestParam("productsJson") String productsJson) throws Exception {
         order.setOrderDescription(orderDescription);
         order.setCustomer(customerManager.getCustomerById(customerId));
-        List<Product> products= new ArrayList<>();
+
+        // Parse the JSON array of product IDs
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Long> productIds = objectMapper.readValue(productsJson, new TypeReference<List<Long>>() {});
+
+        List<Product> products = new ArrayList<>();
         for (Long productId : productIds) {
             products.add(productManager.getProductById(productId));
         }
@@ -75,4 +87,6 @@ public class OrderController {
         orderManager.addOrder(order);
         return "redirect:/orders";
     }
+
+
 }
