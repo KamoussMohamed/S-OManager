@@ -41,7 +41,7 @@ public class OrderService implements OrderManager{
     @Override
     public boolean deleteOrderByOrderId(Integer orderId) {
         try {
-            orderRepository.deleteByOrderId(orderId);
+            orderRepository.deleteOrderByOrderId(orderId);
             return true;
         }catch (Exception e){
             System.out.println(e.getMessage());

@@ -75,7 +75,6 @@ public class OrderController {
         order.setOrderDescription(orderDescription);
         order.setCustomer(customerManager.getCustomerById(customerId));
 
-        // Parse the JSON array of product IDs
         ObjectMapper objectMapper = new ObjectMapper();
         List<Long> productIds = objectMapper.readValue(productsJson, new TypeReference<List<Long>>() {});
 
@@ -83,7 +82,9 @@ public class OrderController {
         for (Long productId : productIds) {
             products.add(productManager.getProductById(productId));
         }
+
         order.setProducts(products);
+
         for (Product product : products) {
             product.setQuantity(product.getQuantity() - 1);
         }
@@ -91,5 +92,10 @@ public class OrderController {
         return "redirect:/orders";
     }
 
+    @GetMapping("/delete_order")
+    public String deleteOrder(@RequestParam("id") Integer orderId) {
+        orderManager.deleteOrderByOrderId(orderId);
+        return "redirect:/orders";
+    }
 
 }

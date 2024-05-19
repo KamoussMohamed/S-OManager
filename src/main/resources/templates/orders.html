@@ -24,6 +24,9 @@
             <span th:utext="${productOccurrencesDisplay[order.orderId]}"></span>
         </td>
         <td th:text="${orderTotalAmounts[order.orderId]}"></td>
+        <td>
+            <a th:href="@{/delete_order(id=${order.orderId})}">Delete</a>
+        </td>
 
     </tr>
     </tbody>

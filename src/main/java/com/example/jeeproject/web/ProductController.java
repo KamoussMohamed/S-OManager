@@ -57,6 +57,7 @@ public class ProductController {
             return "redirect:error";
         }
     }
+
     @GetMapping("/update_product")
     public String updateProduct(Model model, @RequestParam(name = "id") Long id){
         Product product = productManager.getProductById(id);
