@@ -13,7 +13,7 @@
             const quantityInput = document.getElementById('quantity');
             const quantity = parseInt(quantityInput.value);
 
-            // Repeat the product ID based on its quantity
+            // Ajouter le produit au tableau selectedProducts
             for (let i = 0; i < quantity; i++) {
                 selectedProducts.push(productId);
             }
@@ -26,16 +26,30 @@
             const tableBody = document.getElementById('selectedProductsTableBody');
             tableBody.innerHTML = '';
 
+            // Utiliser un objet pour stocker les produits avec leur quantité
+            const productQuantities = {};
+
+            // Calculer les quantités de chaque produit
             selectedProducts.forEach(productId => {
+                // Si le produit existe déjà, incrémentez la quantité
+                if (productQuantities[productId]) {
+                    productQuantities[productId]++;
+                } else { // Sinon, initialiser la quantité à 1
+                    productQuantities[productId] = 1;
+                }
+            });
+
+            // Afficher les produits avec leur quantité totale
+            Object.keys(productQuantities).forEach(productId => {
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
                 const quantityCell = document.createElement('td');
 
-                // Get product name based on product ID
+                // Récupérer le nom du produit basé sur l'ID
                 const productName = document.querySelector('#products [value="' + productId + '"]').text;
 
                 nameCell.textContent = productName;
-                quantityCell.textContent = 1; // Since we're repeating the product, set quantity to 1
+                quantityCell.textContent = productQuantities[productId]; // Afficher la quantité totale
 
                 row.appendChild(nameCell);
                 row.appendChild(quantityCell);
