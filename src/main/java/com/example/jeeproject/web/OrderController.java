@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 
@@ -100,6 +98,35 @@ public class OrderController {
         }
         orderManager.deleteOrderByOrderId(orderId);
         return "redirect:/orders";
+    }
+
+    @GetMapping("/invoice")
+    public String showInvoice(Model model, @RequestParam(name = "id") Integer orderId) {
+        Order order = orderManager.getOrderById(orderId);
+        Map<Integer, Double> orderTotalAmounts = new HashMap<>();
+
+        Set<String> productNames = new HashSet<String>();
+        List<Product> uniqueProducts = order.getProducts().stream()
+                .filter(product -> productNames.add(product.getProductName()))
+                .sorted((p1, p2) -> p1.getProductName().compareToIgnoreCase(p2.getProductName()))
+                .collect(Collectors.toList());
+
+
+
+        Comparator<Product> productComparator = Comparator.comparing(Product::getProductName, String.CASE_INSENSITIVE_ORDER);
+        Map<Product, Integer> productOccurrences = new TreeMap<>(productComparator);
+        for (Product product : order.getProducts()) {
+            productOccurrences.put(product, productOccurrences.getOrDefault(product, 0) + 1);
+        }
+
+        double totalAmount = orderManager.totalAmount(order.getOrderId());
+        orderTotalAmounts.put(order.getOrderId(), totalAmount);
+
+        model.addAttribute("order", order);
+        model.addAttribute("uniqueProducts", uniqueProducts);
+        model.addAttribute("productOccurrences", productOccurrences);
+        model.addAttribute("orderTotalAmounts", orderTotalAmounts);
+        return "invoice";
     }
 
 }

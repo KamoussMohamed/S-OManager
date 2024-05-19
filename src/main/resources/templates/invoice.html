@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Order description</th>
+        <th>Customer</th>
+        <th>Products</th>
+        <th>Ordered Quantity</th>
+        <th>Total Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:object ="${order}">
+        <td th:text ="${order.orderDescription}"></td>
+        <td th:text ="${order.customer.name}"></td>
+        <td>
+            <span th:each="product : ${uniqueProducts}">
+                <span th:text="${product.getProductName()}"></span><br/>
+            </span>
+        </td>
+        <td>
+            <span th:each="entry : ${productOccurrences}">x
+                <span th:text="${entry.value}"></span><br/>
+            </span>
+        </td>
+        <td th:text="${orderTotalAmounts[order.orderId]}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
