@@ -84,6 +84,9 @@ public class OrderController {
             products.add(productManager.getProductById(productId));
         }
         order.setProducts(products);
+        for (Product product : products) {
+            product.setQuantity(product.getQuantity() - 1);
+        }
         orderManager.addOrder(order);
         return "redirect:/orders";
     }

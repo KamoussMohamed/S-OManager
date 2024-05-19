@@ -17,7 +17,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String productName;
-    private double quantity;
+    private double quantity; //Stock
     private double productUnitPrice;
 
     @ManyToMany(mappedBy = "products")

@@ -13,43 +13,63 @@
             const quantityInput = document.getElementById('quantity');
             const quantity = parseInt(quantityInput.value);
 
-            // Ajouter le produit au tableau selectedProducts
+            // Call the function to check stock and add item
+            checkStockAndAddItem(productId, productName, quantity);
+
+            quantityInput.value = '';
+        }
+
+        function checkStockAndAddItem(productId, productName, quantity) {
+            // Find the selected product
+            const selectedProduct = document.querySelector('#products [value="' + productId + '"]');
+            const stock = parseFloat(selectedProduct.getAttribute('data-stock'));
+
+            // Calculate the total quantity of the product already in the cart
+            const totalQuantityInCart = selectedProducts.filter(id => id === productId).length;
+
+            // Check if the total quantity exceeds the available stock
+            if (totalQuantityInCart + quantity > stock) {
+                alert("Stock insuffisant pour " + productName);
+                return; // Exit the function if stock is insufficient
+            }
+
+            // Add the product to the selectedProducts array
             for (let i = 0; i < quantity; i++) {
                 selectedProducts.push(productId);
             }
 
+            // Update the table
             updateTable();
-            quantityInput.value = '';
         }
 
         function updateTable() {
             const tableBody = document.getElementById('selectedProductsTableBody');
             tableBody.innerHTML = '';
 
-            // Utiliser un objet pour stocker les produits avec leur quantité
+            // Use an object to store products with their quantities
             const productQuantities = {};
 
-            // Calculer les quantités de chaque produit
+            // Calculate the quantities of each product
             selectedProducts.forEach(productId => {
-                // Si le produit existe déjà, incrémentez la quantité
+                // If the product already exists, increment the quantity
                 if (productQuantities[productId]) {
                     productQuantities[productId]++;
-                } else { // Sinon, initialiser la quantité à 1
+                } else { // Otherwise, initialize the quantity to 1
                     productQuantities[productId] = 1;
                 }
             });
 
-            // Afficher les produits avec leur quantité totale
+            // Display the products with their total quantities
             Object.keys(productQuantities).forEach(productId => {
                 const row = document.createElement('tr');
                 const nameCell = document.createElement('td');
                 const quantityCell = document.createElement('td');
 
-                // Récupérer le nom du produit basé sur l'ID
+                // Get the product name based on the ID
                 const productName = document.querySelector('#products [value="' + productId + '"]').text;
 
                 nameCell.textContent = productName;
-                quantityCell.textContent = productQuantities[productId]; // Afficher la quantité totale
+                quantityCell.textContent = productQuantities[productId]; // Display the total quantity
 
                 row.appendChild(nameCell);
                 row.appendChild(quantityCell);
@@ -85,7 +105,7 @@
     <div>
         <label for="products">Select Products:</label>
         <select id="products" name="products">
-            <option th:each="prod : ${products}" th:value="${prod.id}" th:text="${prod.productName}"></option>
+            <option th:each="prod : ${products}" th:value="${prod.id}" th:text="${prod.productName}" th:attr="data-stock=${prod.quantity}"></option>
         </select>
     </div>
     <div>
