@@ -94,6 +94,10 @@ public class OrderController {
 
     @GetMapping("/delete_order")
     public String deleteOrder(@RequestParam("id") Integer orderId) {
+        Order order = orderManager.getOrderById(orderId);
+        for (Product product : order.getProducts()) {
+            product.setQuantity(product.getQuantity() + 1);
+        }
         orderManager.deleteOrderByOrderId(orderId);
         return "redirect:/orders";
     }
