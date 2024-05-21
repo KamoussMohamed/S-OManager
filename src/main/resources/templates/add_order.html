@@ -3,131 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Order</title>
-    <script>
-        let selectedProducts = [];
-
-        function addItem() {
-            const productSelect = document.getElementById('products');
-            const productId = productSelect.value;
-            const productName = productSelect.options[productSelect.selectedIndex].text;
-            const quantityInput = document.getElementById('quantity');
-            const quantity = parseInt(quantityInput.value);
-
-            // Call the function to check stock and add item
-            checkStockAndAddItem(productId, productName, quantity);
-
-            quantityInput.value = '';
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
         }
 
-        function checkStockAndAddItem(productId, productName, quantity) {
-            // Find the selected product
-            const selectedProduct = document.querySelector('#products [value="' + productId + '"]');
-            const stock = parseFloat(selectedProduct.getAttribute('data-stock'));
-
-            // Calculate the total quantity of the product already in the cart
-            const totalQuantityInCart = selectedProducts.filter(id => id === productId).length;
-
-            // Check if the total quantity exceeds the available stock
-            if (totalQuantityInCart + quantity > stock) {
-                alert("Stock insuffisant pour " + productName);
-                return; // Exit the function if stock is insufficient
-            }
-
-            // Add the product to the selectedProducts array
-            for (let i = 0; i < quantity; i++) {
-                selectedProducts.push(productId);
-            }
-
-            // Update the table
-            updateTable();
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: #fff;
         }
 
-        function updateTable() {
-            const tableBody = document.getElementById('selectedProductsTableBody');
-            tableBody.innerHTML = '';
-
-            // Use an object to store products with their quantities
-            const productQuantities = {};
-
-            // Calculate the quantities of each product
-            selectedProducts.forEach(productId => {
-                // If the product already exists, increment the quantity
-                if (productQuantities[productId]) {
-                    productQuantities[productId]++;
-                } else { // Otherwise, initialize the quantity to 1
-                    productQuantities[productId] = 1;
-                }
-            });
-
-            // Display the products with their total quantities
-            Object.keys(productQuantities).forEach(productId => {
-                const row = document.createElement('tr');
-                const nameCell = document.createElement('td');
-                const quantityCell = document.createElement('td');
-
-                // Get the product name based on the ID
-                const productName = document.querySelector('#products [value="' + productId + '"]').text;
-
-                nameCell.textContent = productName;
-                quantityCell.textContent = productQuantities[productId]; // Display the total quantity
-
-                row.appendChild(nameCell);
-                row.appendChild(quantityCell);
-                tableBody.appendChild(row);
-            });
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
         }
 
-        function submitForm() {
-            const form = document.getElementById('orderForm');
-            const productsInput = document.createElement('input');
-            productsInput.type = 'hidden';
-            productsInput.name = 'productsJson';
-            productsInput.value = JSON.stringify(selectedProducts);
-
-            form.appendChild(productsInput);
-            form.submit();
+        .navbar a:hover {
+            background-color: #0056b3;
+            border-radius: 4px;
         }
-    </script>
+
+        .navbar .left-section a {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .right-section a {
+            margin-left: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .add-order-section {
+            width: 45%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .selected-products-section {
+            width: 45%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        thead th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .back-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h1>Add Order</h1>
-<form id="orderForm" action="/add_orderPost" method="post">
-    <div>
-        <label for="orderDescription">Order Description:</label>
-        <input type="text" id="orderDescription" name="orderDescription" required>
+<div class="navbar">
+    <div class="left-section">
+        <a href="/">S&OManager</a>
     </div>
-    <div>
-        <label for="customer">Customer:</label>
-        <select id="customer" name="customer">
-            <option th:each="cust : ${customers}" th:value="${cust.customerId}" th:text="${cust.name}"></option>
-        </select>
+    <div class="right-section">
+        <a href="/orders">Orders</a>
+        <a href="/customers">Customers</a>
+        <a href="/products">Products</a>
     </div>
-    <div>
-        <label for="products">Select Products:</label>
-        <select id="products" name="products">
-            <option th:each="prod : ${products}" th:value="${prod.id}" th:text="${prod.productName}" th:attr="data-stock=${prod.quantity}"></option>
-        </select>
+</div>
+<div class="container">
+    <div class="add-order-section">
+        <h2>Add Order</h2>
+        <form id="orderForm" action="/add_orderPost" method="post">
+            <div>
+                <label for="orderDescription">Order Description:</label>
+                <input type="text" id="orderDescription" name="orderDescription" required>
+            </div>
+            <div>
+                <label for="customer">Customer:</label>
+                <select id="customer" name="customer">
+                    <option th:each="cust : ${customers}" th:value="${cust.customerId}" th:text="${cust.name}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="products">Select Products:</label>
+                <select id="products" name="products">
+                    <option th:each="prod : ${products}" th:value="${prod.id}" th:text="${prod.productName}" th:attr="data-stock=${prod.quantity}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" required>
+            </div>
+            <button type="button" onclick="addItem()">Add Item</button>
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
     </div>
-    <div>
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" min="1" required>
+    <div class="selected-products-section">
+        <h2>Selected Products</h2>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody id="selectedProductsTableBody">
+            </tbody>
+        </table>
     </div>
-    <button type="button" onclick="addItem()">Add Item</button>
-    <button type="button" onclick="submitForm()">Submit</button>
-</form>
+</div>
+<script>
+    let selectedProducts = [];
 
-<h2>Selected Products</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Product Name</th>
-        <th>Quantity</th>
-    </tr>
-    </thead>
-    <tbody id="selectedProductsTableBody">
-    </tbody>
-</table>
+    function addItem() {
+        const productSelect = document.getElementById('products');
+        const productId = productSelect.value;
+        const productName = productSelect.options[productSelect.selectedIndex].text;
+        const quantityInput = document.getElementById('quantity');
+        const quantity = parseInt(quantityInput.value);
 
-<a href="/orders">Orders list</a>
+        // Call the function to check stock and add item
+        checkStockAndAddItem(productId, productName, quantity);
+
+        quantityInput.value = '';
+    }
+
+    function checkStockAndAddItem(productId, productName, quantity) {
+        // Find the selected product
+        const selectedProduct = document.querySelector('#products [value="' + productId + '"]');
+        const stock = parseFloat(selectedProduct.getAttribute('data-stock'));
+
+        // Calculate the total quantity of the product already in the cart
+        const totalQuantityInCart = selectedProducts.filter(id => id === productId).length;
+
+        // Check if the total quantity exceeds the available stock
+        if (totalQuantityInCart + quantity > stock) {
+            alert("Stock insuffisant pour " + productName);
+            return; // Exit the function if stock is insufficient
+        }
+
+        // Add the product to the selectedProducts array
+        for (let i = 0; i < quantity; i++) {
+            selectedProducts.push(productId);
+        }
+
+        // Update the table
+        updateTable();
+    }
+
+    function updateTable() {
+        const tableBody = document.getElementById('selectedProductsTableBody');
+        tableBody.innerHTML = '';
+
+        // Use an object to store products with their quantities
+        const productQuantities = {};
+
+        // Calculate the quantities of each product
+        selectedProducts.forEach(productId => {
+            // If the product already exists, increment the quantity
+            if (productQuantities[productId]) {
+                productQuantities[productId]++;
+            } else { // Otherwise, initialize the quantity to 1
+                productQuantities[productId] = 1;
+            }
+        });
+
+        // Display the products with their total quantities
+        Object.keys(productQuantities).forEach(productId => {
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            const quantityCell = document.createElement('td');
+
+            // Get the product name based on the ID
+            const productName = document.querySelector('#products [value="' + productId + '"]').text;
+
+            nameCell.textContent = productName;
+            quantityCell.textContent = productQuantities[productId]; // Display the total quantity
+
+            row.appendChild(nameCell);
+            row.appendChild(quantityCell);
+            tableBody.appendChild(row);
+        });
+    }
+
+    function submitForm() {
+        const form = document.getElementById('orderForm');
+        const productsInput = document.createElement('input');
+        productsInput.type = 'hidden';
+        productsInput.name = 'productsJson';
+        productsInput.value = JSON.stringify(selectedProducts);
+
+        form.appendChild(productsInput);
+        form.submit();
+    }
+</script>
 </body>
 </html>

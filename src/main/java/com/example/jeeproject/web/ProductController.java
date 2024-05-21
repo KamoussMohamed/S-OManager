@@ -19,12 +19,7 @@ public class ProductController {
     @Autowired
     private ProductManager productManager;
 
-
-    @GetMapping("")
-    public String start(){
-        return "index";
-    }
-
+    
     @GetMapping("/products")
     public String products(Model model){
         List<Product> products = productManager.getAllProducts();

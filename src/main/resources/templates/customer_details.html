@@ -1,26 +1,124 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Customer Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: #fff;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+        }
+
+        .navbar a:hover {
+            background-color: #0056b3;
+            border-radius: 4px;
+        }
+
+        .navbar .left-section a {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .right-section a {
+            margin-left: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        h1 {
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        thead th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .back-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Address</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:object="${customerToBeDetailed}">
-        <td th:text="${customerToBeDetailed.name}"></td>
-        <td th:text="${customerToBeDetailed.email}"></td>
-        <td th:text="${customerToBeDetailed.address}"></td>
-    </tr>
-    </tbody>
-</table>
-<a href="/customers">Customers list</a>
+<div class="navbar">
+    <div class="left-section">
+        <a href="/">S&OManager</a>
+    </div>
+    <div class="right-section">
+        <a href="/orders">Orders</a>
+        <a href="/customers">Customers</a>
+        <a href="/products">Products</a>
+    </div>
+</div>
+<div class="container">
+    <h1>Customer Details</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Address</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:object="${customerToBeDetailed}">
+            <td th:text="${customerToBeDetailed.name}"></td>
+            <td th:text="${customerToBeDetailed.email}"></td>
+            <td th:text="${customerToBeDetailed.address}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/customers" class="back-link">Customers list</a>
+</div>
 </body>
 </html>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Customer List</title>
+    <title>Add AppUser</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,59 +49,58 @@
             text-align: left;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        form {
             background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        form div {
+            margin-bottom: 15px;
         }
 
-        thead th {
-            background-color: #007bff;
-            color: #fff;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
 
-        tbody tr:nth-child(even) {
-            background-color: #f2f2f2;
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
 
-        .add-customer-link {
+        button {
             background-color: #007bff;
             color: #fff;
             border: none;
             border-radius: 5px;
-            padding: 8px 15px;
-            text-decoration: none;
-            font-size: 16px;
-            display: inline-block;
-            margin-bottom: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
-        .add-customer-link:hover {
+        button:hover {
             background-color: #0056b3;
         }
 
-        .action-links a {
+        .back-link {
             display: inline-block;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
             padding: 8px 15px;
             border-radius: 5px;
-            margin-right: 5px;
+            margin-top: 20px;
             transition: background-color 0.3s ease;
         }
 
-        .action-links a:hover {
+        .back-link:hover {
             background-color: #0056b3;
         }
     </style>
@@ -118,30 +117,27 @@
     </div>
 </div>
 <div class="container">
-    <h1>Customer List</h1>
-    <a href="/add_customer" class="add-customer-link">Add Customer</a>
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="customer : ${customers}">
-            <td th:text="${customer.name}"></td>
-            <td th:text="${customer.email}"></td>
-            <td th:text="${customer.address}"></td>
-            <td class="action-links">
-                <a th:href="@{customer_details(customerId=${customer.getCustomerId()})}">Details</a>
-                <a th:href="@{update_customer(customerId=${customer.getCustomerId()})}">Modify</a>
-                <a th:href="@{delete_customer(customerId=${customer.getCustomerId()})}">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <h1>Add AppUser</h1>
+    <form action="/add_appUserPost" method="post">
+        <div>
+            <label for ="appUserName">Username</label>
+            <input type="text" id="appUserName" name="appUserName" required>
+        </div>
+        <div>
+            <label for ="appUserEmail">Email</label>
+            <input type="email" id="appUserEmail" name="appUserEmail" required>
+        </div>
+        <div>
+            <label for="appUserPassword">Password</label>
+            <input type="text" id="appUserPassword" name="appUserPassword" required>
+        </div>
+        <div>
+            <label for="inAppUserRole">InApp Role</label>
+            <input type="text" id="inAppUserRole" name="inAppUserRole" required>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <a href="/app_users" class="back-link">AppUsers List</a>
 </div>
 </body>
 </html>
