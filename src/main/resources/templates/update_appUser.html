@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Add Customer</title>
+    <title>Update AppUser</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -119,23 +119,29 @@
     </div>
 </div>
 <div class="container">
-    <h1>Add Customer</h1>
-    <form action="/add_customerPost" method="post">
+    <h1>Update AppUser</h1>
+    <form th:action="@{/save_updated_appUser}" th:object="${appUserToBeUpdated}" method="post">
+        <input type="hidden" th:field="*{id}">
         <div>
-            <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" name="customerName" required>
+            <label for="appUserName">AppUser Name:</label>
+            <input type="text" id="appUserName" th:field="*{username}" required>
         </div>
         <div>
-            <label for="customerEmail">Customer Email:</label>
-            <input type="email" id="customerEmail" name="customerEmail" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" required>
         </div>
         <div>
-            <label for="customerAddress">Customer Address:</label>
-            <input type="text" id="customerAddress" name="customerAddress" required>
+            <label for="password">Password:</label>
+            <input type="text" id="password" th:field="*{password}" required>
         </div>
-        <button type="submit">Submit</button>
+
+        <div>
+            <label for="inAppRole">inAppRole:</label>
+            <input type="text" id="inAppRole" th:field="*{inAppRole}" required>
+        </div>
+        <button type="submit">Update AppUser</button>
     </form>
-    <a href="/customers" class ="back-link">Customers list</a>
+    <a href="/appUsers" class="back-link">AppUsers list</a>
 </div>
 </body>
 </html>

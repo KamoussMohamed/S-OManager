@@ -2,6 +2,7 @@ package com.example.jeeproject.web;
 
 
 import com.example.jeeproject.dao.entities.AppUser;
+import com.example.jeeproject.dao.entities.Customer;
 import com.example.jeeproject.services.AppUserManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -66,6 +68,19 @@ public class AppUserController {
     @GetMapping("/delete_appUser")
     public String delete_app_user(Model model, @RequestParam(name = "appUserId") Integer appUserId){
         appUserManager.deleteAppUserById(appUserId);
+        return "redirect:/app_users";
+    }
+
+    @GetMapping("update_appUser")
+    public String updateAppUser(Model model, @RequestParam(name = "appUserId") Integer appUserId) {
+        AppUser appUser = appUserManager.findAppUserById(appUserId);
+        model.addAttribute("appUserToBeUpdated", appUser);
+        return "update_appUser";
+    }
+
+    @PostMapping("/save_updated_appUser")
+    public String saveUpdatedAppUser(@ModelAttribute("appUserToBeUpdated") AppUser appUser) {
+        appUserManager.updateAppUser(appUser);
         return "redirect:/app_users";
     }
 

@@ -1,6 +1,7 @@
 package com.example.jeeproject.config;
 
 
+import com.example.jeeproject.services.AppAdminUserDetailsService;
 import com.example.jeeproject.services.AppUserUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,8 @@ public class SecurityConfig {
 
     @Autowired
     private AppUserUserDetailsService appUserDetailsService;
+    @Autowired
+    private AppAdminUserDetailsService appAdminUserDetailsService;
 
     @Bean
     SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
@@ -25,7 +28,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(requests -> requests
                         .requestMatchers("/login").permitAll()
-                        .anyRequest().hasRole("USER")
+                        .requestMatchers("/app_admins", "/app_users","/add_appAdmin","/add_appUserPost", "/add_appAdminPost", "/add_appUserPost","/delete_appAdmin","/delete_appUser","/update_appUser","/save_updated_appUser","/app").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -39,7 +43,7 @@ public class SecurityConfig {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(appUserDetailsService);
-        auth.userDetailsService(appUserDetailsService);
+        auth.userDetailsService(appAdminUserDetailsService);
     }
 
     @Bean

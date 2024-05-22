@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Product Details</title>
@@ -95,9 +95,11 @@
         <a href="/">S&OManager</a>
     </div>
     <div class="right-section">
-        <a href="/orders">Orders</a>
-        <a href="/customers">Customers</a>
-        <a href="/products">Products</a>
+        <a sec:authorize="hasRole('USER')" href="/orders">Orders</a>
+        <a sec:authorize="hasRole('USER')" href="/customers">Customers</a>
+        <a sec:authorize="hasRole('USER')" href="/products">Products</a>
+        <a sec:authorize="hasRole('ADMIN')" href="/app_users">Users</a>
+        <a sec:authorize="hasRole('ADMIN')" href="/app_admins">Admins</a>
     </div>
 </div>
 <div class="container">

@@ -73,7 +73,7 @@
       background-color: #f2f2f2;
     }
 
-    .add-appUser-link {
+    .add-appAdmin-link {
       background-color: #007bff;
       color: #fff;
       border: none;
@@ -86,7 +86,7 @@
       transition: background-color 0.3s ease;
     }
 
-    .add-appUser-link:hover {
+    .add-appAdmin-link:hover {
       background-color: #0056b3;
     }
 
@@ -120,25 +120,22 @@
   </div>
 </div>
 <div class="container">
-  <h1>AppUsers List</h1>
-  <a href="/add_appUser" class="add-appUser-link">Add AppUser</a>
+  <h1>AppAdmins List</h1>
+  <a href="/add_appAdmin" class="add-appAdmin-link">Add AppAdmin</a>
   <table>
     <thead>
     <tr>
       <th>Username</th>
       <th>Email</th>
-      <th>Role</th>
       <th>Actions</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="appUser : ${appUsersList}">
-      <td th:text="${appUser.getUsername()}"></td>
-      <td th:text="${appUser.getEmail()}"></td>
-      <td th:text="${appUser.getInAppRole()}"></td>
+    <tr th:each="appAdmin : ${appAdminsList}">
+      <td th:text="${appAdmin.getUsername()}"></td>
+      <td th:text="${appAdmin.getEmail()}"></td>
       <td class="action-links">
-        <a th:href="@{delete_appUser(appUserId=${appUser.getId()})}">Delete</a>
-        <a th:href="@{update_appUser(appUserId=${appUser.getId()})}">Modify</a>
+        <a th:href="@{delete_appAdmin(appAdminId=${appAdmin.getId()})}">Delete</a>
       </td>
     </tr>
     </tbody>

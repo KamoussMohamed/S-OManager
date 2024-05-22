@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,10 +72,11 @@
     <h1>Stock and orders management</h1>
     <div class="greeting">Welcome, <span th:text="${username}"></span>!</div>
     <div class="button-container">
-        <button onclick="window.location.href='/customers'">Customers</button>
-        <button onclick="window.location.href='/products'">Products</button>
-        <button onclick="window.location.href='/orders'">Orders</button>
-        <button onclick="window.location.href='/app_users'">Users</button>
+        <button sec:authorize="hasRole('USER')" onclick="window.location.href='/customers'">Customers</button>
+        <button sec:authorize="hasRole('USER')" onclick="window.location.href='/products'">Products</button>
+        <button sec:authorize="hasRole('USER')" onclick="window.location.href='/orders'">Orders</button>
+        <button sec:authorize="hasRole('ADMIN')" onclick="window.location.href='/app_users'">Users</button>
+        <button sec:authorize="hasRole('ADMIN')" onclick="window.location.href='/app_admins'">Admins</button>
     </div>
 </div>
 <footer>

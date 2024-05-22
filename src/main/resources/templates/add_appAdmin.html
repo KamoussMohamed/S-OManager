@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Add Customer</title>
+    <title>Add AppAdmin</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -119,23 +119,23 @@
     </div>
 </div>
 <div class="container">
-    <h1>Add Customer</h1>
-    <form action="/add_customerPost" method="post">
+    <h1>Add AppAdmin</h1>
+    <form action="/add_appAdminPost" method="post">
         <div>
-            <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" name="customerName" required>
+            <label for ="appAdminName">Username</label>
+            <input type="text" id="appAdminName" name="appAdminName" required>
         </div>
         <div>
-            <label for="customerEmail">Customer Email:</label>
-            <input type="email" id="customerEmail" name="customerEmail" required>
+            <label for ="appAdminEmail">Email</label>
+            <input type="email" id="appAdminEmail" name="appAdminEmail" required>
         </div>
         <div>
-            <label for="customerAddress">Customer Address:</label>
-            <input type="text" id="customerAddress" name="customerAddress" required>
+            <label for="appAdminPassword">Password</label>
+            <input type="text" id="appAdminPassword" name="appAdminPassword" required>
         </div>
         <button type="submit">Submit</button>
     </form>
-    <a href="/customers" class ="back-link">Customers list</a>
+    <a href="/app_admins" class="back-link">AppAdmins List</a>
 </div>
 </body>
 </html>
