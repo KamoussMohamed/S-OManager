@@ -1,9 +1,11 @@
 package com.example.jeeproject;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
+import com.example.jeeproject.dao.entities.AppUser;
 import com.example.jeeproject.dao.entities.Customer;
 import com.example.jeeproject.dao.entities.Order;
 import com.example.jeeproject.dao.entities.Product;
+import com.example.jeeproject.services.AppUserManager;
 import com.example.jeeproject.services.CustomerManager;
 import com.example.jeeproject.services.OrderManager;
 import com.example.jeeproject.services.ProductManager;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 @EnableTransactionManagement
 public class JeeProjectApplication implements CommandLineRunner {
 
+	@Autowired
+	private AppUserManager appUserManager;
 
 	public static void main(String[] args) {
 		SpringApplication.run(JeeProjectApplication.class, args);

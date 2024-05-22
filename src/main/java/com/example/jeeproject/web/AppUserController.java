@@ -3,7 +3,10 @@ package com.example.jeeproject.web;
 
 import com.example.jeeproject.dao.entities.AppUser;
 import com.example.jeeproject.services.AppUserManager;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +22,19 @@ public class AppUserController {
     @Autowired
     private AppUserManager appUserManager;
 
-    @GetMapping("")
-    public String index() {
+    @GetMapping("/index")
+    public String index(HttpSession session, Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        session.setAttribute("username", username);
+        model.addAttribute("username", username); // Add username to the model
         return "index";
+    }
+
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
     @GetMapping("/error")
